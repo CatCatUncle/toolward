@@ -374,7 +374,8 @@ export const zh: Record<string, string> = {
   "Review the diff before accepting it. If the change is legitimate, re-run `toolward lock` and commit the new file.":
     "先审阅 diff 再接受。变更确属正常的，重新执行 `toolward lock` 并提交新锁文件。",
   "New {kind} \"{id}\" appeared since the lock file was written.": "锁文件生成之后新出现了{kind}「{id}」。",
-  "{kind} \"{id}\" changed: {from} → {to}.": "{kind}「{id}」已变更：{from} → {to}。",
+  "{kind} \"{id}\" changed: {from} → {to}. It was approved as \"{before}\"":
+    "{kind}「{id}」已变更：{from} → {to}。当初批准的是「{before}」",
   "{kind} \"{id}\" from the lock file is no longer present.": "锁文件中的{kind}「{id}」已不存在。",
 };
 

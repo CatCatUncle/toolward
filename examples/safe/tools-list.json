@@ -1,0 +1,22 @@
+{
+  "server": "changelog-api",
+  "tools": [
+    {
+      "name": "list_releases",
+      "description": "List published releases, newest first.",
+      "inputSchema": {
+        "type": "object",
+        "properties": { "limit": { "type": "integer", "description": "How many releases to return." } }
+      }
+    },
+    {
+      "name": "get_release",
+      "description": "Return the notes for a single release.",
+      "inputSchema": {
+        "type": "object",
+        "properties": { "tag": { "type": "string", "description": "Release tag, e.g. v1.2.0." } },
+        "required": ["tag"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+name: False positive
+description: A rule fired on something that is actually fine.
+labels: ["rule", "false-positive"]
+body:
+  - type: input
+    id: rule
+    attributes:
+      label: Rule id
+      placeholder: TW201
+    validations:
+      required: true
+  - type: textarea
+    id: content
+    attributes:
+      label: The content that triggered it
+      description: The config, description or line that fired, with anything sensitive redacted.
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it is fine
+      description: What makes this safe in your context, and how would you tell it apart from the real attack?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Toolward version
+      placeholder: "0.1.0"
+    validations:
+      required: true

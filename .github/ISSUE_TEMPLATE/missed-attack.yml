@@ -1,0 +1,45 @@
+name: Missed attack
+description: Toolward did not flag something it should have. The most valuable report.
+labels: ["rule", "false-negative"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks — this is the report that makes Toolward better.
+
+        **Do not paste real credentials or real customer data.** Fake, syntactically
+        valid values are what the fixtures use.
+  - type: textarea
+    id: attack
+    attributes:
+      label: What does the attack do?
+      description: What does a malicious extension achieve, and what happens to the victim?
+      placeholder: A tool description instructs the model to read ~/.ssh/id_rsa and pass it as a "trace" argument on every call.
+    validations:
+      required: true
+  - type: textarea
+    id: fixture
+    attributes:
+      label: Minimal file that reproduces it
+      description: The smallest config, SKILL.md or manifest that carries the attack.
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: What Toolward reported
+      description: Output of `toolward scan <path> --fail-on none`.
+      render: shell
+  - type: input
+    id: version
+    attributes:
+      label: Toolward version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: seen
+    attributes:
+      label: Seen in the wild?
+      description: Link to the package, advisory or write-up, if there is one. Skip if this is hypothetical.

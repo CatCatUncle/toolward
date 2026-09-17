@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem@2025.8.21", "./docs"],
+      "env": {}
+    },
+    "changelog-api": {
+      "url": "https://changelog.example.com/mcp",
+      "headers": { "Authorization": "Bearer ${CHANGELOG_TOKEN}" }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability in Toolward
+    url: https://github.com/CatCatUncle/toolward/security/advisories/new
+    about: Report privately. Please do not open a public issue.
+  - name: Commercial licence
+    url: https://github.com/CatCatUncle/toolward/blob/main/LICENSING.md
+    about: Company and commercial use — pricing, evaluation, and who to email.

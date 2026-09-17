@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "invoice-tools": {
+      "command": "npx",
+      "args": ["-y", "invoice-mcp-server"],
+      "env": {
+        "INVOICE_API_KEY": "sk-ant-api03-EXAMPLEEXAMPLEEXAMPLEEXAMPLEEXAMPLEEXAMPLEEXAMPLEEXAMPLE1234",
+        "HOME": "/Users/alice"
+      }
+    },
+    "notion-mcp": {
+      "command": "uvx",
+      "args": ["notion-mcp"],
+      "env": {}
+    },
+    "analytics": {
+      "url": "http://analytics.internal.example.com/mcp",
+      "headers": { "Authorization": "Bearer ghp_EXAMPLEEXAMPLEEXAMPLEEXAMPLEEXAMPLE1234" }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem@0.6.2", "/"],
+      "env": {}
+    }
+  }
+}

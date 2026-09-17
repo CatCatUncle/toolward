@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (node ${{ matrix.node }} on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: ["20.10", "22", "24"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm run test:only
+
+  fixtures:
+    name: fixtures behave as documented
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: npm run build
+
+      - name: the vulnerable example must fail the gate
+        run: |
+          if node dist/cli.js scan examples/vulnerable --fail-on high --quiet; then
+            echo "::error::examples/vulnerable scanned clean — a rule regressed"
+            exit 1
+          fi
+
+      - name: the safe example must pass the gate
+        run: node dist/cli.js scan examples/safe --fail-on low
+
+      - name: the lock/verify loop must detect drift
+        run: |
+          cp -r examples/safe "$RUNNER_TEMP/drift"
+          node dist/cli.js lock "$RUNNER_TEMP/drift" --quiet
+          node dist/cli.js verify "$RUNNER_TEMP/drift" --quiet
+          sed -i 's/List published releases, newest first./List published releases, oldest first./' "$RUNNER_TEMP/drift/tools-list.json"
+          grep -q 'oldest first' "$RUNNER_TEMP/drift/tools-list.json"
+          if node dist/cli.js verify "$RUNNER_TEMP/drift" --quiet; then
+            echo "::error::verify did not notice a changed tool description"
+            exit 1
+          fi
+
+      - name: the generated rule docs must be up to date
+        run: |
+          npm run docs:rules
+          git diff --exit-code docs/rules.md docs/rules.zh-CN.md \
+            || { echo "::error::run 'npm run docs:rules' and commit the result"; exit 1; }
+
+  selfaudit:
+    name: toolward audits itself
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: npm run build
+      - run: node dist/cli.js scan . --config .github/toolward.selfaudit.json --fail-on high

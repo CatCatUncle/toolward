@@ -1,0 +1,43 @@
+name: Bug
+description: Toolward crashed, produced wrong output, or behaved unexpectedly.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If this is a security issue **in Toolward itself**, stop and read
+        [SECURITY.md](https://github.com/CatCatUncle/toolward/blob/main/SECURITY.md)
+        instead — do not file it publicly.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Command and output
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Toolward version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Node version and OS
+      placeholder: "node 22.11.0, macOS 15.2"
+    validations:
+      required: true

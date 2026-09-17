@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Toolward">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7b955"/>
+      <stop offset="1" stop-color="#e08e1a"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="#12151c"/>
+  <path d="M64 24 L96 36 v28 c0 22-14 34-32 40-18-6-32-18-32-40V36z"
+        fill="none" stroke="url(#g)" stroke-width="7" stroke-linejoin="round"/>
+  <circle cx="58" cy="60" r="13" fill="none" stroke="#f7b955" stroke-width="6"/>
+  <line x1="68" y1="70" x2="82" y2="84" stroke="#f7b955" stroke-width="7" stroke-linecap="round"/>
+</svg>

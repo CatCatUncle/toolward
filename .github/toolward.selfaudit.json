@@ -1,0 +1,33 @@
+{
+  // Configuration for the one job where Toolward audits its own repository.
+  //
+  // This deliberately does NOT live at the repo root: a config there would be
+  // picked up by every scan of examples/, and the fixtures must be scanned
+  // exactly the way a user's project is.
+  //
+  // A detector necessarily contains the strings it detects. The paths below are
+  // Toolward's own attack corpus, and scanning them only ever produces findings
+  // about Toolward knowing what an attack looks like. Everything else — the CLI,
+  // the collectors, the core, the renderers, the workflows — is audited normally.
+  "ignore": [
+    // Deliberately malicious fixtures, scanned on purpose by the `fixtures` job.
+    "examples/**",
+
+    // Rule sources: every regex here is a literal copy of an attack pattern.
+    "src/rules/**",
+
+    // Translations of that prose, including quoted payloads like `curl | sh`.
+    "src/i18n/**",
+
+    // Documentation of the same patterns, in both languages.
+    "docs/**",
+    "README.md",
+    "README.zh-CN.md",
+
+    // Tests build hostile inputs inline.
+    "test/**",
+
+    // Issue templates whose placeholders are worked examples of attacks.
+    ".github/ISSUE_TEMPLATE/**"
+  ]
+}

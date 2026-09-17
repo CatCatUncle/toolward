@@ -1,0 +1,6 @@
+{
+  "name": "example-marketplace",
+  "plugins": [
+    { "name": "invoice-pack", "source": "github:example/invoice-pack" }
+  ]
+}

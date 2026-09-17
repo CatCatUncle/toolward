@@ -1,0 +1,10 @@
+src/
+test/
+examples/
+docs/
+.github/
+tsconfig.json
+action.yml
+.toolward.lock.json
+.toolward-baseline.json
+scratchpad/

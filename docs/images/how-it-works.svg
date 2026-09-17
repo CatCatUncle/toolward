@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 280" width="1120" height="280" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <rect width="1120" height="280" rx="16" fill="#12151c"/>
+
+  <text x="40" y="44" fill="#8b93a7" font-size="15" letter-spacing="1.6">WHAT YOUR AGENT LOADS</text>
+  <text x="404" y="44" fill="#8b93a7" font-size="15" letter-spacing="1.6">TOOLWARD</text>
+  <text x="884" y="44" fill="#8b93a7" font-size="15" letter-spacing="1.6">WHAT YOU GET</text>
+
+  <g fill="#e7eaf0" font-size="17">
+    <rect x="40" y="68" width="288" height="44" rx="10" fill="#1b202b"/>
+    <text x="60" y="96">.mcp.json · config.toml</text>
+    <rect x="40" y="124" width="288" height="44" rx="10" fill="#1b202b"/>
+    <text x="60" y="152">SKILL.md · plugin.json</text>
+    <rect x="40" y="180" width="288" height="44" rx="10" fill="#1b202b"/>
+    <text x="60" y="208">hooks · settings · tools/list</text>
+  </g>
+
+  <g stroke="#3a4152" stroke-width="2" fill="none">
+    <path d="M336 90 h48" marker-end="url(#a)"/>
+    <path d="M336 146 h48" marker-end="url(#a)"/>
+    <path d="M336 202 h48" marker-end="url(#a)"/>
+    <path d="M792 146 h48" marker-end="url(#a)"/>
+  </g>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#3a4152"/>
+    </marker>
+  </defs>
+
+  <rect x="400" y="68" width="384" height="156" rx="14" fill="none" stroke="#f7b955" stroke-width="2"/>
+  <text x="424" y="104" fill="#f7b955" font-size="19" font-weight="600">37 static rules</text>
+  <g fill="#b6bdcc" font-size="15">
+    <text x="424" y="134">injection · supply chain · secrets</text>
+    <text x="424" y="160">execution · network · governance</text>
+  </g>
+  <text x="424" y="198" fill="#6f7789" font-size="14">never runs it · never installs it · never phones home</text>
+
+  <g fill="#e7eaf0" font-size="17">
+    <rect x="856" y="68" width="224" height="44" rx="10" fill="#1b202b"/>
+    <text x="876" y="96">findings + fix</text>
+    <rect x="856" y="124" width="224" height="44" rx="10" fill="#1b202b"/>
+    <text x="876" y="152">SARIF / JSON / MD</text>
+    <rect x="856" y="180" width="224" height="44" rx="10" fill="#1b202b"/>
+    <text x="876" y="208">exit 1 → red build</text>
+  </g>
+</svg>

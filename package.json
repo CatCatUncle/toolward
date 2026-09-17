@@ -1,0 +1,68 @@
+{
+  "name": "toolward",
+  "version": "0.1.0",
+  "description": "Security auditor for AI agent extensions: MCP servers, skills, plugins and connectors. Static analysis, never executes what it audits.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "security",
+    "audit",
+    "prompt-injection",
+    "tool-poisoning",
+    "ai-agent",
+    "skills",
+    "connectors",
+    "sast",
+    "sarif"
+  ],
+  "homepage": "https://github.com/CatCatUncle/toolward#readme",
+  "bugs": {
+    "url": "https://github.com/CatCatUncle/toolward/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CatCatUncle/toolward.git"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "author": "AIjentra (https://aijentra.com)",
+  "type": "module",
+  "bin": {
+    "toolward": "dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "README.zh-CN.md",
+    "LICENSE",
+    "LICENSING.md",
+    "LICENSING.zh-CN.md",
+    "CHANGELOG.md",
+    "NOTICE"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf dist",
+    "prepack": "npm run clean && npm run build",
+    "test": "npm run build && node --test test/i18n.test.js test/lock.test.js test/parse.test.js test/rules.test.js test/score.test.js",
+    "test:only": "node --test test/i18n.test.js test/lock.test.js test/parse.test.js test/rules.test.js test/score.test.js",
+    "selfscan": "npm run build && node dist/cli.js scan examples/vulnerable --fail-on none",
+    "docs:rules": "npm run build && node dist/cli.js rules --format md > docs/rules.md && node dist/cli.js rules --format md --lang zh > docs/rules.zh-CN.md"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}

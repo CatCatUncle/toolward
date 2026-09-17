@@ -1,0 +1,139 @@
+name: "Toolward — agent extension audit"
+description: "Audit MCP servers, skills, plugins and connectors for prompt injection, supply-chain and permission risks."
+author: "AIjentra"
+
+branding:
+  icon: "shield"
+  color: "purple"
+
+inputs:
+  paths:
+    description: "Space-separated paths to scan."
+    required: false
+    default: "."
+  command:
+    description: "scan or verify."
+    required: false
+    default: "scan"
+  fail-on:
+    description: "critical | high | medium | low | none."
+    required: false
+    default: "high"
+  min-severity:
+    description: "Hide findings below this severity."
+    required: false
+    default: ""
+  format:
+    description: "pretty | json | md | sarif | compact."
+    required: false
+    default: "pretty"
+  only:
+    description: "Comma-separated rule ids to run."
+    required: false
+    default: ""
+  config:
+    description: "Path to toolward.config.json."
+    required: false
+    default: ""
+  baseline:
+    description: "Path to a baseline file of accepted findings."
+    required: false
+    default: ""
+  lang:
+    description: "Report language: en or zh."
+    required: false
+    default: "en"
+  upload-sarif:
+    description: "Also write toolward.sarif for github/codeql-action/upload-sarif."
+    required: false
+    default: "false"
+  version:
+    description: "Version of toolward to run. Pin this."
+    required: false
+    default: "0.1.0"
+
+outputs:
+  score:
+    description: "Risk score out of 100."
+    value: ${{ steps.run.outputs.score }}
+  grade:
+    description: "A to F."
+    value: ${{ steps.run.outputs.grade }}
+  findings:
+    description: "Total number of findings reported."
+    value: ${{ steps.run.outputs.findings }}
+  critical:
+    description: "Number of critical findings."
+    value: ${{ steps.run.outputs.critical }}
+  high:
+    description: "Number of high findings."
+    value: ${{ steps.run.outputs.high }}
+  sarif-file:
+    description: "Path to the SARIF file, when upload-sarif is true."
+    value: ${{ steps.run.outputs.sarif-file }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run Toolward
+      id: run
+      shell: bash
+      env:
+        TOOLWARD_PATHS: ${{ inputs.paths }}
+        TOOLWARD_COMMAND: ${{ inputs.command }}
+        TOOLWARD_FAIL_ON: ${{ inputs.fail-on }}
+        TOOLWARD_MIN_SEVERITY: ${{ inputs.min-severity }}
+        TOOLWARD_FORMAT: ${{ inputs.format }}
+        TOOLWARD_ONLY: ${{ inputs.only }}
+        TOOLWARD_CONFIG: ${{ inputs.config }}
+        TOOLWARD_BASELINE: ${{ inputs.baseline }}
+        TOOLWARD_LANG: ${{ inputs.lang }}
+        TOOLWARD_UPLOAD_SARIF: ${{ inputs.upload-sarif }}
+        TOOLWARD_VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+
+        read -r -a targets <<< "${TOOLWARD_PATHS}"
+
+        common=("${TOOLWARD_COMMAND}" "${targets[@]}")
+        # `if` rather than `[ ... ] && ...`, which would trip `set -e` when false.
+        if [ -n "${TOOLWARD_MIN_SEVERITY}" ]; then common+=(--min-severity "${TOOLWARD_MIN_SEVERITY}"); fi
+        if [ -n "${TOOLWARD_ONLY}" ];         then common+=(--only "${TOOLWARD_ONLY}"); fi
+        if [ -n "${TOOLWARD_CONFIG}" ];       then common+=(--config "${TOOLWARD_CONFIG}"); fi
+        if [ -n "${TOOLWARD_BASELINE}" ];     then common+=(--baseline "${TOOLWARD_BASELINE}"); fi
+
+        toolward() { npx --yes "toolward@${TOOLWARD_VERSION}" "${common[@]}" "$@"; }
+
+        # Machine-readable output first, so the outputs below are set even when
+        # the gate at the end fails the build.
+        toolward --format json --out toolward-report.json --fail-on none --quiet
+
+        node -e '
+          const fs = require("node:fs");
+          const d = JSON.parse(fs.readFileSync("toolward-report.json", "utf8"));
+          const c = d.counts;
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, [
+            `score=${d.score}`,
+            `grade=${d.grade}`,
+            `findings=${d.findings.length}`,
+            `critical=${c.critical}`,
+            `high=${c.high}`,
+            "",
+          ].join("\n"));
+          console.log(`::notice title=Toolward::score ${d.score}/100 (grade ${d.grade}) \u2014 critical ${c.critical}, high ${c.high}, medium ${c.medium}, low ${c.low}`);
+        '
+
+        if [ "${TOOLWARD_UPLOAD_SARIF}" = "true" ]; then
+          toolward --format sarif --out toolward.sarif --fail-on none --quiet
+          echo "sarif-file=toolward.sarif" >> "$GITHUB_OUTPUT"
+        fi
+
+        # Human-readable report in the job log, and the actual gate.
+        toolward --format "${TOOLWARD_FORMAT}" --fail-on "${TOOLWARD_FAIL_ON}"
+
+    - name: Upload SARIF
+      if: ${{ inputs.upload-sarif == 'true' && always() }}
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: toolward.sarif
+        category: toolward

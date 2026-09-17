@@ -4,6 +4,10 @@ import { globToRegExp, parseFrontmatter, parseJsonc, stripJsonc } from "../dist/
 import { parseTomlLite } from "../dist/core/toml.js";
 import { detectHosts, expandHome, knownHosts } from "../dist/collect/hosts.js";
 
+// `join()` uses the host separator, so Windows returns backslashes. The
+// separator is the platform's business; these tests are about the path parts.
+const slash = (path) => path.replaceAll("\\", "/");
+
 test("stripJsonc removes comments but keeps string contents", () => {
   const input = `{
     // a line comment
@@ -77,19 +81,19 @@ test("known hosts cover the mainstream agent clients", () => {
   assert.equal(new Set(ids).size, ids.length, "duplicate host id");
   for (const host of knownHosts("/home/u", "linux")) {
     assert.ok(host.paths.length > 0, `${host.id} has no paths`);
-    for (const path of host.paths) assert.ok(path.startsWith("/home/u"), `${host.id}: ${path} escapes home`);
+    for (const path of host.paths) assert.ok(slash(path).startsWith("/home/u"), `${host.id}: ${path} escapes home`);
   }
 });
 
 test("host paths follow the platform convention", () => {
   const mac = knownHosts("/Users/u", "darwin").find((h) => h.id === "claude-desktop");
-  assert.match(mac.paths[0], /Library\/Application Support\/Claude/);
+  assert.match(slash(mac.paths[0]), /Library\/Application Support\/Claude/);
   const linux = knownHosts("/home/u", "linux").find((h) => h.id === "claude-desktop");
-  assert.match(linux.paths[0], /\.config\/Claude/);
+  assert.match(slash(linux.paths[0]), /\.config\/Claude/);
 });
 
 test("a custom host path from the config file may start with ~", () => {
-  assert.equal(expandHome("~/.myagent/mcp.json", "/home/u"), "/home/u/.myagent/mcp.json");
+  assert.equal(slash(expandHome("~/.myagent/mcp.json", "/home/u")), "/home/u/.myagent/mcp.json");
   assert.equal(expandHome("~", "/home/u"), "/home/u");
   assert.equal(expandHome("/etc/agent.json", "/home/u"), "/etc/agent.json");
   assert.equal(expandHome("./local/~weird", "/home/u"), "./local/~weird");

@@ -5,7 +5,7 @@
 **Please do not open a public issue.**
 
 - GitHub Security Advisories: [report privately](https://github.com/CatCatUncle/toolward/security/advisories/new)
-- Email: **security@aijentra.com**
+- Email: **contact@aijentra.com**
 
 Useful in a first report: what you did, what happened, what you expected, the
 Toolward version, and a minimal file that reproduces it. If the report involves a

@@ -51,7 +51,7 @@ Commercial licences are per-organisation and perpetual for the version range
 they cover; they include the right to run Toolward in CI on unlimited
 repositories inside that organisation.
 
-Write to **licensing@aijentra.com** with your organisation's name, rough size,
+Write to **contact@aijentra.com** with your organisation's name, rough size,
 and how you plan to use it. Startups under 10 people and pre-revenue companies
 get a substantial discount — say so in the first email.
 

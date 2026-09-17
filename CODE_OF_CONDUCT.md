@@ -31,7 +31,7 @@ project.
 
 ## Enforcement
 
-Report to **conduct@aijentra.com**. Reports are read by the maintainers and kept
+Report to **contact@aijentra.com**. Reports are read by the maintainers and kept
 confidential. Responses range from a private word to a permanent ban, in
 proportion to what happened and whether it continued after being raised.
 
